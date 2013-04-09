@@ -107,6 +107,15 @@ endfunction " }}}
 " vimwiki#base#find_next_link
 " vimwiki#base#find_prev_link
 
+function! s:endsWith(str, substr)
+  let len_str = strlen(a:str)
+  let len_sub = strlen(a:substr)
+  if len_str < len_sub
+    return 0
+  endif
+  return stridx(a:str, a:substr) == len_str - len_sub
+endfunction
+
 " vimwiki#base#follow_link
 function! vimwiki#markdown_base#follow_link(split, ...) "{{{ Parse link at cursor and pass
   " to VimwikiLinkHandler, or failing that, the default open_link handler
@@ -143,6 +152,9 @@ function! vimwiki#markdown_base#follow_link(split, ...) "{{{ Parse link at curso
     endif
 
     if lnk != ""
+      if s:endsWith(lnk, VimwikiGet('ext'))
+        let lnk = substitute(lnk, '\'.VimwikiGet('ext').'$', '', '')
+      endif
       if !VimwikiLinkHandler(lnk)
         if !vimwiki#markdown_base#open_reflink(lnk)
           call vimwiki#base#open_link(cmd, lnk)
@@ -299,4 +311,3 @@ endfunction "}}}
 " -------------------------------------------------------------------------
 " Load syntax-specific Wiki functionality
 " -------------------------------------------------------------------------
-

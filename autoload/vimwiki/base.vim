@@ -1569,5 +1569,3 @@ for syn in vimwiki#base#get_known_syntaxes()
   execute 'runtime! autoload/vimwiki/'.syn.'_base.vim'
 endfor
 " -------------------------------------------------------------------------
-
-
